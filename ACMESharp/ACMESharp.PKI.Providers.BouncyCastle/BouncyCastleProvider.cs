@@ -376,9 +376,9 @@ namespace ACMESharp.PKI.Providers
                         new X509CertificateEntry(FromCertPem(x.Pem))).ToArray();
                 var bcPk = FromPrivatePem(rsaPk.Pem);
 
-                var pfx = new Pkcs12Store();
-                pfx.SetCertificateEntry(bcCerts[0].Certificate.ToString(), bcCerts[0]);
-                pfx.SetKeyEntry(bcCerts[0].Certificate.ToString(),
+                var pfx = new Pkcs12Store(); 
+                pfx.SetCertificateEntry(bcCerts[0].Certificate.SubjectDN.ToString(), bcCerts[0]);
+                pfx.SetKeyEntry(bcCerts[0].Certificate.SubjectDN.ToString(),
                         new AsymmetricKeyEntry(bcPk.Private), new[] { bcCerts[0] });
 
                 for (int i = 1; i < bcCerts.Length; ++i)

@@ -420,8 +420,16 @@ namespace ACMESharp
                 throw new ArgumentOutOfRangeException(nameof(challengeType),
                         "no challenge found matching requested type")
                         .With("challengeType", challengeType);
-
-            var provider = ChallengeDecoderExtManager.GetProvider(challengeType);
+            IChallengeDecoderProvider provider = null;
+            if (challengeType == AcmeProtocol.CHALLENGE_TYPE_HTTP)
+            {
+                provider = new ACMESharp.ACME.Providers.HttpChallengeDecoderProvider();
+            }
+            if (challengeType == AcmeProtocol.CHALLENGE_TYPE_DNS)
+            {
+                provider = new ACME.Providers.DnsChallengeDecoderProvider();
+            }
+            //var provider = ChallengeDecoderExtManager.GetProvider(challengeType); //This doesn't work when running hte the Azure function environment.
             if (provider == null)
                 throw new NotSupportedException("no provider exists for requested challenge type")
                         .With("challengeType", challengeType);
